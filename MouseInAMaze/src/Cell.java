@@ -3,9 +3,9 @@ public class Cell {
 	String position;
 	int reward;
 	
-	Cell(String p, int w){
-		position = p;
-		reward = w;
+	public Cell(int row, char col){
+		String strrow = Integer.toString(row);
+		position = strrow+col;
 	}
 	
 	void displayPos(){
