@@ -45,4 +45,8 @@ public class Cell {
 		isTrap = true;
 	}
 	
+	public void setReward(int rw){
+		reward = rw;
+	}
+	
 }
