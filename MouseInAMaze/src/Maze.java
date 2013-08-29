@@ -14,6 +14,7 @@ public class Maze {
 	Cell mouse;
 	Cell cheese;
 	String[] traps;
+	int[][] rewards;
 
 	public static void main(String arg[]){
 		Cell[][] aGrid = new Cell[SIZE][SIZE];
@@ -36,23 +37,76 @@ public class Maze {
 	}
 
 	public void createMaze(Cell[][] aGrid){
+		int[][] rewards = new int[9][9];
+		
 		for(int r=0; r<SIZE; r++){
 			for(int c=0; c<SIZE; c++){
 				aGrid[r][c] = new Cell(r, c, 10);
 			}
 		}
-
-		String[] traps = {"1A","1B","1H","4I","5A","7E","8E","8F","9A","9I"};
-		for(int i=0; i<10; i++){
-			for(int r=0; r<9; r++){
-				for(int c=0; c<9; c++){
-					if(isEqual(aGrid[r][c].position,traps[i])){
-						aGrid[r][c].setTrap();
-//						System.out.println(aGrid[r][c].isTrap);
-					}
-				}
-			}
+		
+		try
+		{
+            FileInputStream read = new FileInputStream("C:/Users/CappucinosaN/Downloads/input.txt");
+            DataInputStream input = new DataInputStream(read);
+            BufferedReader br = new BufferedReader(new InputStreamReader(input));
+            String board = "";
+            int line = 1;
+            	while((board = br.readLine()) != null)
+            		{
+            			if(line==1)
+            			{
+            				Cell mouse = new Cell(board);
+            			}
+            			
+            			else if(line==2)
+            			{
+            				Cell cheese = new Cell(board);
+            			}
+            			
+            			else if(line==3)
+            			{
+            				traps = board.split(" ");
+            				for(int i=0; i<10; i++){
+            					for(int r=0; r<9; r++){
+            						for(int c=0; c<9; c++){
+            							if(isEqual(aGrid[r][c].position,traps[i])){
+            								aGrid[r][c].setTrap();
+//            								System.out.println(aGrid[r][c].isTrap);
+            							}
+            						}
+            					}
+            				}
+            			}
+            			
+            			else
+            				{
+            					int t;
+            					String[] temp = board.split(" ");
+            					for(int i=0; i<9;i++)
+            					{
+            						t = Integer.parseInt(temp[i]);
+            						rewards[line-4][i] = t;	
+            					}	
+            				}
+            			
+            			line++;
+            		}
+            	
+            		for(int i=0; i<9; i++){
+            			for(int j=0;j<9;j++){
+            				aGrid[i][j].setReward(rewards[i][j]);
+            			}
+            		}
+		
+            
+            		input.close();
 		}
+		
+            catch(Exception e)
+            {
+            	System.out.println("Cannot read a text file:" + e.getMessage());
+            }
 	}
 	public void solveDFS(Cell[][] aGrid, Cell current, Cell dest){
 		Stack<Integer> rKeep = new Stack<Integer>();
